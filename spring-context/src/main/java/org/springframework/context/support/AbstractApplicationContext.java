@@ -522,7 +522,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			// 获取bean工厂，解析xml，放入beanDefinitionMap
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
-			// 设置Bean工厂基本信息，注册spring环境中的Bean
+			// 设置Bean工厂基本信息，注册spring自己的Bean
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -850,10 +850,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
 		// 为此上下文初始化转换服务。
-		if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) &&
-				beanFactory.isTypeMatch(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class)) {
-			beanFactory.setConversionService(
-					beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class));
+		if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) && beanFactory.isTypeMatch(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class)) {
+			beanFactory.setConversionService(beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class));
 		}
 
 		// 如果之前没有注册任何 BeanFactoryPostProcessor（例如 PropertySourcesPlaceholderConfigurer bean），则注册一个默认的嵌入值解析器：此时，主要用于注释属性值的解析。

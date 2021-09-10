@@ -884,10 +884,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	@Override
 	public void preInstantiateSingletons() throws BeansException {
-		if (logger.isTraceEnabled()) {
-			logger.trace("Pre-instantiating singletons in " + this);
-		}
-
+		// 学习中：日志记录代码删除
 		// Iterate over a copy to allow for init methods which in turn register new bean definitions.
 		// While this may not be part of the regular factory bootstrap, it does otherwise work fine.
 		List<String> beanNames = new ArrayList<>(this.beanDefinitionNames);

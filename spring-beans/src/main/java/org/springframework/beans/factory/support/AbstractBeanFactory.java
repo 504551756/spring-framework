@@ -314,13 +314,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			if (!typeCheckOnly) {
-				markBeanAsCreated(beanName);
+				markBeanAsCreated(beanName); // bean状态标记为正在创建
 			}
 
 			try {
-				RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
+				RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName); // 从bean工厂获取bean定义
 				checkMergedBeanDefinition(mbd, beanName, args);
-				// Guarantee initialization of beans that the current bean depends on.
+				// 当前 bean 是否有depends on，如果有，则通过递归，先初始化depends on对象
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
@@ -336,15 +336,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					}
 				}
 
-				// Create bean instance.
+				// 实例化bean
 				if (mbd.isSingleton()) {
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
 							return createBean(beanName, mbd, args);
 						} catch (BeansException ex) {
-							// Explicitly remove instance from singleton cache: It might have been put there
-							// eagerly by the creation process, to allow for circular reference resolution.
-							// Also remove any beans that received a temporary reference to the bean.
+							// 从单例缓存中显式删除实例：
+							// 它可能已被创建过程急切地放在那里，以允许循环引用解析。
+							// 还要删除收到对 bean 的临时引用的所有 bean。
 							destroySingleton(beanName);
 							throw ex;
 						}
@@ -389,7 +389,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 		}
 
-		// Check if required type matches the type of the actual bean instance.
+		// 检查所需类型是否与实际 bean 实例的类型匹配。
 		if (requiredType != null && !requiredType.isInstance(bean)) {
 			try {
 				T convertedBean = getTypeConverter().convertIfNecessary(bean, requiredType);
