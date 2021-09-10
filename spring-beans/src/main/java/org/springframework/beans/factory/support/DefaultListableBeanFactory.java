@@ -77,7 +77,6 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
-import org.springframework.core.log.LogMessage;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -584,12 +583,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					if (allowEagerInit) {
 						throw ex;
 					}
-					// Probably a placeholder: let's ignore it for type matching purposes.
-					LogMessage message = (ex instanceof CannotLoadBeanClassException ?
-							LogMessage.format("Ignoring bean class loading failure for bean '%s'", beanName) :
-							LogMessage.format("Ignoring unresolvable metadata in bean definition '%s'", beanName));
-					logger.trace(message, ex);
-					// Register exception, in case the bean was accidentally unresolvable.
+					// 学习中：日志记录代码删除
 					onSuppressedException(ex);
 				} catch (NoSuchBeanDefinitionException ex) {
 					// Bean definition got removed while we were iterating -> ignore.
@@ -615,8 +609,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					result.add(beanName);
 				}
 			} catch (NoSuchBeanDefinitionException ex) {
-				// Shouldn't happen - probably a result of circular reference resolution...
-				logger.trace(LogMessage.format("Failed to check manually registered singleton with name '%s'", beanName), ex);
+				// 学习中：日志记录代码删除
 			}
 		}
 
