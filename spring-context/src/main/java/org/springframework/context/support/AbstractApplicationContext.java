@@ -516,35 +516,35 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
-			// 准备刷新
+			// 准备刷新，获取环境变量，earlyApplicationListeners等
 			prepareRefresh();
 
 			// 获取bean工厂，解析xml，放入beanDefinitionMap
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
-			// Prepare the bean factory for use in this context.
+			// 设置Bean工厂基本信息，注册spring环境中的Bean
 			prepareBeanFactory(beanFactory);
 
 			try {
-				// Allows post-processing of the bean factory in context subclasses.
+				// 扩展点：Bean工厂后置处理
 				postProcessBeanFactory(beanFactory);
 
-				// Invoke factory processors registered as beans in the context.
+				// （如果有）实例化Bean后置处理器
 				invokeBeanFactoryPostProcessors(beanFactory);
 
-				// Register bean processors that intercept bean creation.
+				// 注册Bean的后置处理器
 				registerBeanPostProcessors(beanFactory);
 
-				// Initialize message source for this context.
+				// 初始化 message source
 				initMessageSource();
 
-				// Initialize event multicaster for this context.
+				// 初始化 applicationEventMulticaster
 				initApplicationEventMulticaster();
 
-				// springboot 加载tomcat
+				// 扩展点：springboot 加载tomcat
 				onRefresh();
 
-				// Check for listener beans and register them.
+				// 检查侦听器 bean 并注册它们。
 				registerListeners();
 
 				// 创建Bean
@@ -822,7 +822,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Doesn't affect other listeners, which can be added without being beans.
 	 */
 	protected void registerListeners() {
-		// Register statically specified listeners first.
+		// 首先注册静态指定的侦听器。
 		for (ApplicationListener<?> listener : getApplicationListeners()) {
 			getApplicationEventMulticaster().addApplicationListener(listener);
 		}

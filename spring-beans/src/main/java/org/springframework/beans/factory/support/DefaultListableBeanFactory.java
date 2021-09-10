@@ -903,7 +903,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		for (String beanName : beanNames) {
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
-				// 转换别名，三级缓存
+				// 转换别名，判断 如果Bean是单例的，如果在三级缓存已经创建，则返回对象。如果没有创建，并且不是FactoryBean，则返回false
 				if (isFactoryBean(beanName)) {
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
 					// FactoryBean getBean时返回的是getObject方法值
